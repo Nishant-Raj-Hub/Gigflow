@@ -31,3 +31,4 @@ yarn-error.log*
 *.bak
 *.vmdk
 /node_modules
+.env
