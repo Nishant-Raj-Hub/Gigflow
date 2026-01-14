@@ -13,24 +13,13 @@ declare module "http" {
   }
 }
 
-// Enable CORS for frontend with credentials support
+// Enable CORS - Public API that works with any frontend deployment
 app.use((req, res, next) => {
   const origin = req.headers.origin;
-  const allowedOrigins = [
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "http://127.0.0.1:5173",
-    "http://127.0.0.1:5174",
-    // Deployed Koyeb frontend URL
-  ];
   
-  // For development/testing: allow from any origin if making requests without credentials
-  // For production: only allow specific origins
-  if (allowedOrigins.includes(origin || "")) {
-    res.header("Access-Control-Allow-Origin", origin);
-    res.header("Access-Control-Allow-Credentials", "true");
-  } else if (process.env.NODE_ENV !== "production") {
-    // In development, be more permissive
+  // Allow requests from any origin since we use Authorization header for auth (not cookies)
+  // This works with any frontend deployment (localhost, Vercel, Netlify, etc.)
+  if (origin) {
     res.header("Access-Control-Allow-Origin", origin);
   }
   
