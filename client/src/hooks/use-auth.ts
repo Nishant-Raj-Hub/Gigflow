@@ -14,7 +14,6 @@ export function useAuth() {
     queryKey: ["/api/user"],
     queryFn: async () => {
       const res = await fetch(buildUrl(api.auth.me.path), { 
-        credentials: "include",
         headers: getAuthHeaders(),
       });
       if (!res.ok) {
@@ -42,9 +41,8 @@ export function useLogin() {
       
       const res = await fetch(buildUrl(api.auth.login.path), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
         body: JSON.stringify(validated),
-        credentials: "include",
       });
 
       if (!res.ok) {
@@ -80,9 +78,8 @@ export function useRegister() {
       
       const res = await fetch(buildUrl(api.auth.register.path), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
         body: JSON.stringify(validated),
-        credentials: "include",
       });
 
       if (!res.ok) {
@@ -116,7 +113,7 @@ export function useLogout() {
     mutationFn: async () => {
       await fetch(buildUrl(api.auth.logout.path), { 
         method: "POST",
-        credentials: "include"
+        headers: getAuthHeaders(),
       });
     },
     onSuccess: () => {

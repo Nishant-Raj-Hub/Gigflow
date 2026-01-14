@@ -15,7 +15,6 @@ export function useGigs(search?: string) {
           : buildUrl(api.gigs.list.path);
         
         const res = await fetch(url, { 
-          credentials: "include",
           headers: getAuthHeaders(),
         });
         if (!res.ok) throw new Error("Failed to fetch gigs");
@@ -36,7 +35,6 @@ export function useGig(id: string | number) {
       try {
         const url = buildUrl(api.gigs.get.path, { id: String(id) });
         const res = await fetch(url, {
-          credentials: "include",
           headers: getAuthHeaders(),
         });
         if (res.status === 404) return null;
@@ -66,7 +64,6 @@ export function useCreateGig() {
         method: "POST",
         headers: getAuthHeaders(),
         body: JSON.stringify(validated),
-        credentials: "include",
       });
       
       if (!res.ok) {
@@ -93,7 +90,6 @@ export function useBids(gigId: string | number) {
     queryFn: async () => {
       const url = buildUrl(api.bids.byGig.path, { gigId: String(gigId) });
       const res = await fetch(url, { 
-        credentials: "include",
         headers: getAuthHeaders(),
       });
       if (!res.ok) throw new Error("Failed to fetch bids");
@@ -116,7 +112,6 @@ export function useCreateBid() {
         method: "POST",
         headers: getAuthHeaders(),
         body: JSON.stringify(validated),
-        credentials: "include",
       });
       
       if (!res.ok) {
@@ -146,7 +141,6 @@ export function useHireBid() {
         method: "PATCH",
         headers: getAuthHeaders(),
         body: JSON.stringify({ gigId: String(gigId) }),
-        credentials: "include",
       });
       
       if (!res.ok) throw new Error("Failed to hire freelancer");
