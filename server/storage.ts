@@ -1,6 +1,6 @@
-import { User, Gig, Bid } from "./shared/schema";
-import { IUser, IGig, IBid } from "./shared/types";
-import { connectDb } from "./db";
+import { User, Gig, Bid } from "./shared/schema.js";
+import { IUser, IGig, IBid } from "./shared/types.js";
+import { connectDb } from "./db.js";
 import mongoose from "mongoose";
 
 export interface IStorage {

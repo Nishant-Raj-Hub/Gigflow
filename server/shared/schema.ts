@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
-import { IUser, IGig, IBid } from "./types";
+import { IUser, IGig, IBid } from "./types.js";
 
 // TypeScript interfaces for input validation
 export interface InsertUser {

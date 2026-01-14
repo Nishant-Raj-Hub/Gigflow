@@ -1,8 +1,8 @@
 import "dotenv/config";
 import express, { type Request, Response, NextFunction } from "express";
-import { registerRoutes } from "./routes";
-import { connectDb } from "./db";
-import { serveStatic } from "./static";
+import { registerRoutes } from "./routes.js";
+import { connectDb } from "./db.js";
+import { serveStatic } from "./static.js";
 import { createServer } from "http";
 
 const app = express();

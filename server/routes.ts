@@ -1,8 +1,8 @@
 import type { Express } from "express";
 import type { Server } from "http";
-import { setupAuth } from "./auth";
-import { storage } from "./storage";
-import { api } from "./shared/routes";
+import { setupAuth } from "./auth.js";
+import { storage } from "./storage.js";
+import { api } from "./shared/routes.js";
 
 export async function registerRoutes(
   httpServer: Server,
