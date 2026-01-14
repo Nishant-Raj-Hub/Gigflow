@@ -60,7 +60,7 @@ npm install
 **Frontend** (`client/.env`)
 
 ```
-API_BASE_URL=http://localhost:5000 or Deployed backend base URL 
+VITE_API_BASE_URL=http://localhost:5000 or Deployed backend base URL 
 ```
 
 **Backend** (`server/.env`)

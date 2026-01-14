@@ -10,7 +10,6 @@ import { useRoute, Link } from "wouter";
 import {
   IndianRupee,
   Clock,
-  User,
   Briefcase,
   ChevronLeft,
   CheckCircle2,
