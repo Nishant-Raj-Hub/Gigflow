@@ -1,7 +1,7 @@
 // API Routes and Endpoints
 
-// Base URL from environment variable
-const API_BASE_URL = import.meta.env.API_BASE_URL || 'http://localhost:5000';
+// Base URL from environment variable (must use VITE_ prefix for Vite to expose it)
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
 // Helper to store JWT token in localStorage
 export const setTokenInStorage = (token: string): void => {
@@ -32,11 +32,15 @@ export const buildUrl = (path: string, params?: Record<string, string>) => {
 // Helper to get auth headers with JWT token from storage
 export const getAuthHeaders = (): Record<string, string> => {
   const token = getTokenFromStorage();
+  console.log('getAuthHeaders - token from storage:', token ? `${token.substring(0, 20)}...` : 'null');
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
+    console.log('getAuthHeaders - Added Authorization header:', headers["Authorization"].substring(0, 30) + '...');
+  } else {
+    console.warn('getAuthHeaders - No token found in localStorage!');
   }
   return headers;
 };

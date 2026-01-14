@@ -36,10 +36,19 @@ export function setupAuth(app: Express) {
   // cookie parser to read token cookie
   app.use(cookieParser());
 
-  // middleware to attach user if token present
+  // middleware to attach user if token present (from cookie or Authorization header)
   app.use(async (req: Request, _res: Response, next: NextFunction) => {
     try {
-      const token = req.cookies?.token as string | undefined;
+      let token = req.cookies?.token as string | undefined;
+      
+      // Also check Authorization header: "Bearer <token>"
+      if (!token && req.headers.authorization) {
+        const authHeader = req.headers.authorization;
+        if (authHeader.startsWith("Bearer ")) {
+          token = authHeader.slice(7);
+        }
+      }
+      
       if (!token) return next();
       const data = verifyToken(token);
       if (data?.id) {
