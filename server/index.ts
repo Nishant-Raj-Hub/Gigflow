@@ -13,18 +13,15 @@ declare module "http" {
   }
 }
 
-// Enable CORS for all origins with credentials support
+// Enable CORS for everyone - completely open public API
 app.use((req, res, next) => {
-  const origin = req.headers.origin || req.headers.referer || "*";
+  // Allow any origin
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS, HEAD");
+  res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, X-API-Key");
+  res.setHeader("Access-Control-Max-Age", "3600");
   
-  // Always allow the origin that's making the request
-  res.header("Access-Control-Allow-Origin", origin);
-  res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS, PUT");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Max-Age", "86400");
-  
-  // Handle preflight requests
+  // Handle preflight OPTIONS requests
   if (req.method === "OPTIONS") {
     return res.sendStatus(200);
   }

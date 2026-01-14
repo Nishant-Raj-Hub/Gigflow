@@ -13,7 +13,7 @@ export function useAuth() {
   return useQuery({
     queryKey: ["/api/user"],
     queryFn: async () => {
-      const res = await fetch(buildUrl(api.auth.me.path), { credentials: "include" });
+      const res = await fetch(buildUrl(api.auth.me.path));
       if (!res.ok) {
         if (res.status === 401) return null;
         throw new Error("Failed to fetch user");
@@ -41,7 +41,6 @@ export function useLogin() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(validated),
-        credentials: "include",
       });
 
       if (!res.ok) {
@@ -75,7 +74,6 @@ export function useRegister() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(validated),
-        credentials: "include",
       });
 
       if (!res.ok) {
@@ -104,8 +102,7 @@ export function useLogout() {
   return useMutation({
     mutationFn: async () => {
       await fetch(buildUrl(api.auth.logout.path), { 
-        method: "POST",
-        credentials: "include"
+        method: "POST"
       });
     },
     onSuccess: () => {
