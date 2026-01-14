@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api, buildUrl } from "@/lib/api";
+import { api, buildUrl, getAuthHeaders } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { createGigSchema, createBidSchema, type CreateGigInput, type CreateBidInput } from "@/lib/validation";
 import { mockGigs } from "@/lib/mockData";
@@ -14,7 +14,10 @@ export function useGigs(search?: string) {
           ? `${buildUrl(api.gigs.list.path)}?search=${encodeURIComponent(search)}` 
           : buildUrl(api.gigs.list.path);
         
-        const res = await fetch(url, { credentials: "include" });
+        const res = await fetch(url, { 
+          credentials: "include",
+          headers: getAuthHeaders(),
+        });
         if (!res.ok) throw new Error("Failed to fetch gigs");
         return await res.json();
       } catch (error) {
@@ -32,7 +35,10 @@ export function useGig(id: string | number) {
     queryFn: async () => {
       try {
         const url = buildUrl(api.gigs.get.path, { id: String(id) });
-        const res = await fetch(url, { credentials: "include" });
+        const res = await fetch(url, {
+          credentials: "include",
+          headers: getAuthHeaders(),
+        });
         if (res.status === 404) return null;
         if (!res.ok) throw new Error("Failed to fetch gig details");
         return await res.json();
@@ -58,7 +64,7 @@ export function useCreateGig() {
       
       const res = await fetch(buildUrl(api.gigs.create.path), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
         body: JSON.stringify(validated),
         credentials: "include",
       });
@@ -86,7 +92,10 @@ export function useBids(gigId: string | number) {
     queryKey: [api.bids.byGig.path, gigId],
     queryFn: async () => {
       const url = buildUrl(api.bids.byGig.path, { gigId: String(gigId) });
-      const res = await fetch(url, { credentials: "include" });
+      const res = await fetch(url, { 
+        credentials: "include",
+        headers: getAuthHeaders(),
+      });
       if (!res.ok) throw new Error("Failed to fetch bids");
       return await res.json();
     },
@@ -105,7 +114,7 @@ export function useCreateBid() {
       
       const res = await fetch(buildUrl(api.bids.create.path), {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
         body: JSON.stringify(validated),
         credentials: "include",
       });
@@ -135,7 +144,7 @@ export function useHireBid() {
       const url = buildUrl(api.bids.hire.path, { bidId: String(bidId) });
       const res = await fetch(url, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
         body: JSON.stringify({ gigId: String(gigId) }),
         credentials: "include",
       });
@@ -143,7 +152,7 @@ export function useHireBid() {
       if (!res.ok) throw new Error("Failed to hire freelancer");
       return await res.json();
     },
-    onSuccess: (data, variables) => {
+    onSuccess: (_, variables) => {
       // Use variables.gigId since response might not have it
       const gigId = variables.gigId;
       

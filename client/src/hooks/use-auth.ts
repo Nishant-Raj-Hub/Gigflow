@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api, buildUrl } from "@/lib/api";
+import { api, buildUrl, getAuthHeaders, setTokenInStorage, clearTokenFromStorage } from "@/lib/api";
 import { useAppDispatch } from "./use-redux";
 import { setCredentials, logout } from "../store/authSlice";
 import { useToast } from "@/hooks/use-toast";
@@ -13,7 +13,10 @@ export function useAuth() {
   return useQuery({
     queryKey: ["/api/user"],
     queryFn: async () => {
-      const res = await fetch(buildUrl(api.auth.me.path), { credentials: "include" });
+      const res = await fetch(buildUrl(api.auth.me.path), { 
+        credentials: "include",
+        headers: getAuthHeaders(),
+      });
       if (!res.ok) {
         if (res.status === 401) return null;
         throw new Error("Failed to fetch user");
@@ -50,7 +53,11 @@ export function useLogin() {
       }
       return await res.json();
     },
-    onSuccess: (user) => {
+    onSuccess: (user: any) => {
+      // Store token in localStorage for Authorization header
+      if (user.token) {
+        setTokenInStorage(user.token);
+      }
       dispatch(setCredentials(user));
       toast({ title: "Welcome back!", description: `Logged in as ${user.username}` });
       setLocation("/");
@@ -84,7 +91,11 @@ export function useRegister() {
       }
       return await res.json();
     },
-    onSuccess: (user) => {
+    onSuccess: (user: any) => {
+      // Store token in localStorage for Authorization header
+      if (user.token) {
+        setTokenInStorage(user.token);
+      }
       dispatch(setCredentials(user));
       toast({ title: "Account created!", description: "Welcome to GigFlow" });
       setLocation("/");
@@ -109,6 +120,8 @@ export function useLogout() {
       });
     },
     onSuccess: () => {
+      // Clear token from localStorage
+      clearTokenFromStorage();
       dispatch(logout());
       queryClient.clear();
       toast({ title: "Logged out", description: "Come back soon!" });

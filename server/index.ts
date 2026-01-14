@@ -13,10 +13,27 @@ declare module "http" {
   }
 }
 
-// Enable CORS for frontend running on localhost:5173
+// Enable CORS for frontend with credentials support
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:5173");
-  res.header("Access-Control-Allow-Credentials", "true");
+  const origin = req.headers.origin;
+  const allowedOrigins = [
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:5174",
+    // Deployed Koyeb frontend URL
+  ];
+  
+  // For development/testing: allow from any origin if making requests without credentials
+  // For production: only allow specific origins
+  if (allowedOrigins.includes(origin || "")) {
+    res.header("Access-Control-Allow-Origin", origin);
+    res.header("Access-Control-Allow-Credentials", "true");
+  } else if (process.env.NODE_ENV !== "production") {
+    // In development, be more permissive
+    res.header("Access-Control-Allow-Origin", origin);
+  }
+  
   res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   

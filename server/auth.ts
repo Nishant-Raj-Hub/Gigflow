@@ -70,7 +70,7 @@ export function setupAuth(app: Express) {
       sameSite: "lax",
       secure: process.env.NODE_ENV === "production",
     });
-    return res.status(201).json({ ...user, password: undefined });
+    return res.status(201).json({ ...user, password: undefined, token });
   });
 
   app.post("/api/auth/login", async (req: Request, res: Response) => {
@@ -89,7 +89,7 @@ export function setupAuth(app: Express) {
       sameSite: "lax",
       secure: process.env.NODE_ENV === "production",
     });
-    return res.status(200).json({ ...user, password: undefined });
+    return res.status(200).json({ ...user, password: undefined, token });
   });
 
   app.post("/api/auth/logout", async (req: Request, res: Response) => {

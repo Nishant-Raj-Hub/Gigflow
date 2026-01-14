@@ -12,7 +12,6 @@ Connect. Bid. Hire. Get work done. Simple as that.
 ✅ **User Authentication** - Secure JWT-based auth with HttpOnly cookies  
 ✅ **Dual Roles** - Be a client or freelancer (or both!)  
 ✅ **Gig Management** - Post, browse, and search gigs  
-✅ **Smart Bidding** - Submit proposals and track bid status  
 ✅ **Instant Hiring** - Hire freelancers with one click   
 ✅ **Responsive Design** - Beautiful UI on all devices  
 ✅ **Form Validation** - Zod validation on frontend
@@ -37,7 +36,6 @@ Connect. Bid. Hire. Get work done. Simple as that.
 - **MongoDB + Mongoose** - NoSQL database
 - **JWT** - Authentication tokens
 - **bcryptjs** - Password hashing
-- **CORS** - Cross-origin resource sharing
 
 ---
 
@@ -62,15 +60,15 @@ npm install
 **Frontend** (`client/.env`)
 
 ```
-API_BASE_URL=http://localhost:5000
+API_BASE_URL=http://localhost:5000 or Deployed backend base URL 
 ```
 
 **Backend** (`server/.env`)
 
 ```
 MONGODB_URI=your_mongodb_connection_string
-JWT_SECRET=your_secret_key
-NODE_ENV=development
+JWT_SECRET=your_jwt_secret_key
+PORT=5000
 ```
 
 #### 3. Start the Application

@@ -3,6 +3,21 @@
 // Base URL from environment variable
 const API_BASE_URL = import.meta.env.API_BASE_URL || 'http://localhost:5000';
 
+// Helper to store JWT token in localStorage
+export const setTokenInStorage = (token: string): void => {
+  localStorage.setItem('gigflow_token', token);
+};
+
+// Helper to get JWT token from localStorage
+export const getTokenFromStorage = (): string | null => {
+  return localStorage.getItem('gigflow_token');
+};
+
+// Helper to clear JWT token from localStorage
+export const clearTokenFromStorage = (): void => {
+  localStorage.removeItem('gigflow_token');
+};
+
 // Helper function to build full URLs
 export const buildUrl = (path: string, params?: Record<string, string>) => {
   let url = `${API_BASE_URL}${path}`;
@@ -12,6 +27,18 @@ export const buildUrl = (path: string, params?: Record<string, string>) => {
     });
   }
   return url;
+};
+
+// Helper to get auth headers with JWT token from storage
+export const getAuthHeaders = (): Record<string, string> => {
+  const token = getTokenFromStorage();
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+  return headers;
 };
 
 // API Paths
