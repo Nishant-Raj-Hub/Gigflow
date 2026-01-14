@@ -32,3 +32,4 @@ yarn-error.log*
 *.vmdk
 /node_modules
 .env
+dist
