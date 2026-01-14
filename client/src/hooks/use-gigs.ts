@@ -143,7 +143,7 @@ export function useHireBid() {
       if (!res.ok) throw new Error("Failed to hire freelancer");
       return await res.json();
     },
-    onSuccess: (data, variables) => {
+    onSuccess: (_, variables) => {
       // Use variables.gigId since response might not have it
       const gigId = variables.gigId;
       
