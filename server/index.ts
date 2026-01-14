@@ -13,12 +13,20 @@ declare module "http" {
   }
 }
 
-// Enable CORS for frontend running on localhost:5173
+// Enable CORS for all origins
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:5173");
-  res.header("Access-Control-Allow-Credentials", "true");
+  const origin = req.headers.origin;
+  
+  // Allow all origins
+  if (origin) {
+    res.header("Access-Control-Allow-Origin", origin);
+  } else {
+    res.header("Access-Control-Allow-Origin", "*");
+  }
+  
   res.header("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("Access-Control-Allow-Credentials", "true");
   
   // Handle preflight requests
   if (req.method === "OPTIONS") {
