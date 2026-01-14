@@ -5,8 +5,13 @@ if (!process.env.MONGO_URI) {
 }
 
 export async function connectDb() {
-  await mongoose.connect(process.env.MONGO_URI as string, {
-  });
+  try {
+    await mongoose.connect(process.env.MONGO_URI as string, {});
+    console.log("MongoDB connected successfully");
+  } catch (error) {
+    console.error("MongoDB connection error:", error);
+    throw error;
+  }
 }
 
 export { mongoose };

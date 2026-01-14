@@ -2,7 +2,6 @@ import "dotenv/config";
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes.js";
 import { connectDb } from "./db.js";
-import { serveStatic } from "./static.js";
 import { createServer } from "http";
 
 const app = express();
@@ -77,35 +76,25 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  // connect to MongoDB first
-  await connectDb();
-  await registerRoutes(httpServer, app);
+  try {
+    // connect to MongoDB first
+    await connectDb();
+    await registerRoutes(httpServer, app);
 
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-    const status = err.status || err.statusCode || 500;
-    const message = err.message || "Internal Server Error";
+    app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+      const status = err.status || err.statusCode || 500;
+      const message = err.message || "Internal Server Error";
 
-    res.status(status).json({ message });
-    throw err;
-  });
+      res.status(status).json({ message });
+      throw err;
+    });
 
-  // In production serve static built frontend from server.
-  // In development the frontend is run separately with `cd client && npm run dev`.
-  if (process.env.NODE_ENV === "production") {
-    serveStatic(app);
-  } else {
-    log("Development mode: run frontend separately (cd client && npm run dev)");
-  }
-
-
-  const port = parseInt(process.env.PORT || "5000", 10);
-  httpServer.listen(
-    {
-      port,
-      host: "127.0.0.1",
-    },
-    () => {
+    const port = parseInt(process.env.PORT || "5000", 10);
+    httpServer.listen(port, "0.0.0.0", () => {
       log(`serving on port ${port}`);
-    },
-  );
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
 })();
