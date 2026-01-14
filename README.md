@@ -102,7 +102,6 @@ npm run dev
 - `GET /gigs` - List all gigs
 - `GET /gigs/:id` - Get gig details
 - `POST /gigs` - Create new gig
-- `DELETE /gigs/:id` - Delete gig
 
 ### Bids
 
